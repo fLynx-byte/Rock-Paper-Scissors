@@ -1,3 +1,18 @@
+const buttons = document.querySelectorAll("button");
+const scorePlayer = document.querySelector(".player-score");
+const scoreComputer = document.querySelector(".computer-score");
+const result = document.querySelector(".round-result");
+// GLoval Variable
+let playerScore = 0;
+let computerScore = 0;
+buttons.forEach((button) =>
+  button.addEventListener("click", () => {
+    if (playerScore >= 5 || computerScore >= 5) {
+      return;
+    }
+    game(button.value);
+  })
+);
 /**
  * Your game is going to play against the computer, so begin with a
  * function called getComputerChoice that will randomly return either
@@ -64,30 +79,16 @@ function playRound(playerSelection, computerSelection) {
   return "ERROR! No Win, Lose, or Tie???";
 }
 
-//const playerSelection = "rock";
-//const computerSelection = getComputerChoice();
-//console.log(playRound(playerSelection, computerSelection));
-
-/**
- * Write a NEW function called game(). Call the playRound function inside
- * of this one to play a 5 round game that keeps score and reports a winner
- * or loser at the end.
- * @returns
- */
-function game() {
-  let playerScore = 0;
-  let computerScore = 0;
-  for (let i = 0; i < 5; i++) {
-    let playerChoice = prompt("Choose: Rock, Paper, or Scissors");
-    let result = playRound(playerChoice, getComputerChoice());
-    if (result === "You Win!") playerScore++;
-    if (result === "You Lose!") computerScore++;
-    console.log("Player Score: " + playerScore);
-    console.log("Computer Score: " + computerScore);
+function game(player) {
+  let roundResult = playRound(player, getComputerChoice());
+  if (roundResult === "You Win!") playerScore++;
+  if (roundResult === "You Lose!") computerScore++;
+  scorePlayer.textContent = "Player Score: " + playerScore;
+  scoreComputer.textContent = "Computer Score: " + computerScore;
+  result.textContent = roundResult;
+  if (playerScore >= 5 && computerScore < 5) {
+    result.textContent = "Game Over. You Win!";
+  } else if (playerScore < 5 && computerScore >= 5) {
+    result.textContent = "Game Over. You Lose!";
   }
-  if (playerScore > computerScore) console.log("You Win in a 5 round game!");
-  if (computerScore > playerScore) console.log("You Lose in a 5 round game!");
-  if (playerScore === computerScore)
-    return console.log("The game is a Tie in a 5 round game");
 }
-game();
